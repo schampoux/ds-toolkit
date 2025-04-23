@@ -1,7 +1,7 @@
 import pandas as pd 
 from sklearn.linear_model import LinearRegression
-from preprocessing import Prep
-from linear_models.slr import SLR
+from utilities.preprocessing import Prep
+from linear_models.ols import OLS
 
 def main():
     df = pd.read_csv('./datasets/babies.csv')
@@ -9,12 +9,12 @@ def main():
     prep_instance.remove_nans()
     data = prep_instance.df_no_nans
 
-    slr_instance = SLR(df=data)
+    ols_instance = OLS(df=data)
     feature = data.gestation.name 
     target = data.age.name 
-    x, y = slr_instance.x_y(feature = feature, target=target)
-    slr_model = slr_instance.create_model()
-    print(slr_model)
+    ols_instance.x_y(feature = feature, target=target)
+    ols_model = ols_instance.create_model()
+    print("OLS model created with the following default attributes: ", "\nrank_", "\ncoef_", "\nsingular_", "\nintercept","\nn_features_in_")
 
 if __name__ =="__main__":
     main()
