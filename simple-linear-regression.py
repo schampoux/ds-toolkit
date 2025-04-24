@@ -1,21 +1,22 @@
 import pandas as pd 
 from sklearn.linear_model import LinearRegression
 from utilities.preprocessing import remove_nans, eda_nans
-from linear_models.ols import OLS
-
-
-
+from linear_models.ols import x_y, create_model 
 
 def main():
+    # load in data 
     df = pd.read_csv('./datasets/babies.csv')
-    eda_nans(df)
-    df = remove_nans(df)
-    # ols_instance = OLS(df=data)
-    # feature = data.gestation.name 
-    # target = data.age.name 
-    # ols_instance.x_y(feature = feature, target=target)
-    # ols_model = ols_instance.create_model()
-    # print("OLS model created with the following default attributes: ", "\nrank_", "\ncoef_", "\nsingular_", "\nintercept","\nn_features_in_")
+    
+    # investigate nans 
+    eda_nans(df = df)
+
+    # remove nans
+    df = remove_nans(df = df)
+    feature = df.gestation.name 
+    target = df.age.name
+    # features matrix as pd.DataFrame, target_array as pd.Series
+    features_matrix, target_array = x_y(df = df, feature_name = feature, target_name = target)
+    print(features_matrix, target_array)
 
 if __name__ =="__main__":
     main()
