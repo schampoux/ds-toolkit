@@ -2,6 +2,7 @@ import os
 from lxml import etree 
 import json 
 
+<<<<<<< Updated upstream
 def parse_drug_label(path: str):
     with open(path) as p:
         p
@@ -13,6 +14,15 @@ def parse_drug_label(path: str):
     # root.tag
     # et.ElementTree(file=path)
     return print(root.tag)
+=======
+def parse_drug_label():
+    try:
+        from lxml import etree 
+        print("running with lxml.etree")
+    except:
+        import xml.etree.ElementTree as etree 
+        print("running with Python's xml.etree.ElementTree")        
+>>>>>>> Stashed changes
 
 def get_section_text():
     pass
