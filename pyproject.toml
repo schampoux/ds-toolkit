@@ -1,3 +1,7 @@
 [project]
 name = "ds-toolkit"
 version = "0.0.1"
+
+[project.scripts] 
+# for CLI later use 
+ds-toolkit = "main:main" 
