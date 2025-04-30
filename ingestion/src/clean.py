@@ -1,31 +1,30 @@
-import os 
-from lxml import etree 
-import json 
+import os
+import json
 
-<<<<<<< Updated upstream
+try:
+    from lxml import etree
+    print("running with lxml.etree")
+except ImportError:
+    import xml.etree.ElementTree as etree
+    print("running with Python's xml.etree.ElementTree")
+
+
 def parse_drug_label(path: str):
-    with open(path) as p:
-        p
+    parser = etree.XMLParser(recover=True) if 'lxml' in str(etree) else None
 
-    parser = etree.XMLParser(recover=True) # recover = True to ignore errors from parsing invalid characters 
-    root = etree.parse(data = p, parser = parser)
+    with open(path, 'r') as file:
+        if 'lxml' in str(etree):
+            root = etree.parse(file, parser=parser).getroot()
+        else:
+            root = etree.parse(file).getroot()
 
-    # tree = et.parse(source = path, parser = parser)
-    # root.tag
-    # et.ElementTree(file=path)
-    return print(root.tag)
-=======
-def parse_drug_label():
-    try:
-        from lxml import etree 
-        print("running with lxml.etree")
-    except:
-        import xml.etree.ElementTree as etree 
-        print("running with Python's xml.etree.ElementTree")        
->>>>>>> Stashed changes
+    print(root.tag)
+    return root
+
 
 def get_section_text():
     pass
 
 def process_all_tables():
-    pass 
+    pass
+
