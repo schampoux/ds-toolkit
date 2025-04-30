@@ -1,25 +1,31 @@
 import os
 import json
-
-try:
-    from lxml import etree
-    print("running with lxml.etree")
-except ImportError:
-    import xml.etree.ElementTree as etree
-    print("running with Python's xml.etree.ElementTree")
-
+from lxml import html 
 
 def parse_drug_label(path: str):
-    parser = etree.XMLParser(recover=True) if 'lxml' in str(etree) else None
+    with open(file = path, mode = 'rb') as file:
+            file_content = file.read()
+    tree = html.fromstring(html = file_content)
+    result = {}
 
-    with open(path, 'r') as file:
-        if 'lxml' in str(etree):
-            root = etree.parse(file, parser=parser).getroot()
-        else:
-            root = etree.parse(file).getroot()
+    sections = tree.xpath("//h2") # .xpath() performs a global XPath query against the document 
 
-    print(root.tag)
-    return root
+    for heading in sections:
+        title = heading.text_content().strip().upper()
+        content = []
+
+        # gather sibling elements up until the next <h2> or end of section
+        next_node = heading.getnext()
+        while next_node is not None and next_node.tag != "h2":
+            # append the next node to our content list 
+            content.append(next_node.text_content().strip())
+            next_node = next_node.getnext() # move to the node after 
+
+        if content:
+            # if our content list is not empty, add title: content 
+            # for handling content paragraphs, two newlines are inserted in between each. 
+            result[title] = "\n\n".join(content)
+    return result 
 
 
 def get_section_text():

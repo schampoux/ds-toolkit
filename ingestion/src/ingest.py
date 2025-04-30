@@ -17,14 +17,14 @@ def fetch_spl_list(limit: int = 30) -> list:
     data = response.json()
     return data.get("data", [])
 
-def download_spl_xml(set_id, output_dir="data/raw"):
+def download_spl_html(set_id, output_dir="data/raw"):
     """Download SPL SML file given a set_id."""
-    xml_url = f"https://dailymed.nlm.nih.gov/dailymed/downloadset/{set_id}.json"
-    response = requests.get(xml_url)
+    html_url = f"https://dailymed.nlm.nih.gov/dailymed/downloadset/{set_id}.json"
+    response = requests.get(html_url)
     response.raise_for_status()
 
     os.makedirs(output_dir, exist_ok=True)
-    with open (os.path.join(output_dir, f"{set_id}.xml"), "wb") as f: 
+    with open (os.path.join(output_dir, f"{set_id}.html"), "wb") as f: 
         f.write(response.content) 
 
 if __name__ == "__main__":
@@ -32,4 +32,4 @@ if __name__ == "__main__":
     for spl in spls:
         set_id = spl["setid"]
         print(f"Downloading SPL for set_id {set_id}")
-        download_spl_xml(set_id)
+        download_spl_html(set_id)
