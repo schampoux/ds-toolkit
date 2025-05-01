@@ -1,25 +1,34 @@
-
-
-path = "/Users/spun/Documents/local-development/ds-toolkit/ingestion/data/raw/1d373a90-890d-4420-af40-262afc5dbf7b.xml"
-
 from lxml import etree
+from utilities.misc import prettyprint_html
+from ingestion.src.clean import parse_drug_label
+import os 
 
-def parse_drug_label(path: str):
-    with open(path) as p:
-        p
 
-    parser = etree.XMLParser(recover=True) # recover = True to ignore errors from parsing invalid characters 
-    root = etree.parse(data = p, parser = parser)
 
-    # tree = et.parse(source = path, parser = parser)
-    # root.tag
-    # et.ElementTree(file=path)
-    return print(root.tag)
-
+def process_data(raw_data_dir, processed_data_dir):
+    raw_files = os.listdir(raw_data_dir)
+    for file in raw_files: 
+        input_loc = os.path.join(raw_data_dir, file)
+        # save output as json 
+        output_loc = os.path.join(processed_data_dir, file).replace('.html', '.json')
+        parse_drug_label(input_path = input_loc, output_path = output_loc)
 
 def main():
     print("Running entry point for ds toolkit")
-    parse_drug_label(path = path)
+
+    base_dir = os.getcwd()
+    processed_data_dir = os.path.join(base_dir, "data/processed/")
+    raw_data_dir = os.path.join(base_dir, "data/raw/")
+    
+
+    # process raw files and save into jsons in /data/processed 
+    process_data(
+        raw_data_dir=raw_data_dir,
+        processed_data_dir=processed_data_dir
+    )
+
+
+
 
 if __name__ == "__main__":
     main()
