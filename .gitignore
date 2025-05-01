@@ -1,1 +1,5 @@
-/ingestion/data/raw
+/data/
+__pycache__
+.ipynb_checkpoints
+/datasets
+/notes.txt
