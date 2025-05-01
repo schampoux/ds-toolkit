@@ -1,7 +1,16 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
 [project]
-name = "ds-toolkit"
-version = "0.0.1"
+name = "toolkit" 
+description = "Data science toolkit"
+authors = [{ email = "sergiochampoux@gmail.com"}]
+version = "0.1.0"
 
 [project.scripts] 
 # for CLI later use 
-ds-toolkit = "main:main" 
+toolkit = "main:main" 
+
+[tool.setuptools.packages.find]
+where = ["src"]
