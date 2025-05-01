@@ -8,6 +8,7 @@ import requests
 import os 
 
 BASE_URL = "https://dailymed.nlm.nih.gov/dailymed/services/v2/spls.json"
+DOWNLOAD_URL = "https://dailymed.nlm.nih.gov/dailymed/downloadset/"
 
 def fetch_spl_list(base_url: str, limit: int = 30) -> list:
     """ Fetch a list of Structured Product Label (SPL) entries. """
@@ -17,10 +18,10 @@ def fetch_spl_list(base_url: str, limit: int = 30) -> list:
     data = response.json()
     return data.get("data", [])
 
-def download_spl_html(set_id, output_dir="data/raw"):
+def download_spl_html(set_id, download_url: str, output_dir="data/raw", ):
     """Download SPL SML file given a set_id."""
-    html_url = f"https://dailymed.nlm.nih.gov/dailymed/downloadset/{set_id}.json"
-    response = requests.get(html_url)
+    download_url_json   = download_url + set_id + ".json"
+    response = requests.get(download_url_json)
     response.raise_for_status()
 
     os.makedirs(output_dir, exist_ok=True)
