@@ -9,9 +9,9 @@ import os
 
 BASE_URL = "https://dailymed.nlm.nih.gov/dailymed/services/v2/spls.json"
 
-def fetch_spl_list(limit: int = 30) -> list:
+def fetch_spl_list(base_url: str, limit: int = 30) -> list:
     """ Fetch a list of Structured Product Label (SPL) entries. """
-    response = requests.get(url = BASE_URL,
+    response = requests.get(url = base_url,
                             params = {'pagesize': limit})
     response.raise_for_status()
     data = response.json()
@@ -28,7 +28,7 @@ def download_spl_html(set_id, output_dir="data/raw"):
         f.write(response.content) 
 
 if __name__ == "__main__":
-    spls = fetch_spl_list(limit = 30)
+    spls = fetch_spl_list(base_url = BASE_URL, limit = 30)
     for spl in spls:
         set_id = spl["setid"]
         print(f"Downloading SPL for set_id {set_id}")
