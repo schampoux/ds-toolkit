@@ -2,7 +2,10 @@ import os
 import json
 from lxml import html 
 
-def parse_drug_label(input_path: str, output_path: str):
+def parse_drug_label(
+          input_path: str, 
+          output_path: str
+          ):
     """
     Parse raw .html input and save to /data/processed directory as .json
     """
@@ -26,6 +29,9 @@ def parse_drug_label(input_path: str, output_path: str):
         if content:
             result[title] = "\n\n".join(content)
 
+    if not os.path.exists(output_path): 
+         os.mknod(output_path)
+         
     with open(output_path, "w") as f:
          json.dump(result, f)
 
