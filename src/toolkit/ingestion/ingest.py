@@ -14,32 +14,30 @@ from dotenv import load_dotenv
 load_dotenv()
 
 def fetch_spl_list(base_uri: str, limit: int = 30) -> list[dict[str: Any]]:
-    
     """ Fetch a list of Structured Product Label (SPL) entries. """
-    spl_url = os.path.join(base_uri, "spls.json")
 
+    spl_url = os.path.join(base_uri, "spls.json")
     response = requests.get(
         url = spl_url,
         params = {'pagesize': limit}
         )
-
     response.raise_for_status()
     data = response.json()
     return data.get("data", [])
 
-def download_spl_html(
+def download_spl_xml(
         set_id, 
-        download_url: str, 
+        base_uri: str, 
         output_dir: str
         ) -> Path:
     
     """Download SPL SML file given a set_id."""
-    download_url_json  = download_url + set_id + ".json"
+    download_url_json  = os.path.join(base_uri, f"spls/{set_id}.xml")
     response = requests.get(download_url_json)
     response.raise_for_status()
 
     os.makedirs(output_dir, exist_ok=True)
-    file_path = os.path.join(output_dir, f"{set_id}.html")
+    file_path = os.path.join(output_dir, f"{set_id}.xml")
 
     with open (file_path, "wb") as f: 
         f.write(response.content) 
@@ -47,24 +45,20 @@ def download_spl_html(
     return file_path
 
 def main(): 
-    flow_time = datetime.time(datetime.now())
-    output_dir_raw = f"./data/raw/{flow_time}/"
-    base_uri = os.getenv('BASE_URI')
-    print("BASE_URI: ", base_uri)
+    # flow_time = datetime.time(datetime.now())
+    # output_dir_raw = f"./data/raw/{flow_time}/"
+    # base_uri = os.getenv('BASE_URI')
+    # print("BASE_URI: ", base_uri)
 
-    spls = fetch_spl_list(base_uri = base_uri, limit = 2)
-    return print(spls)
+    # spls = fetch_spl_list(base_uri = base_uri, limit = 2)
+    # return print(spls)
 
-    for spl in spls:
-        set_id = spl["setid"]
-        print(f"Downloading SPL for set_id {set_id} into {output_dir_raw}")
+    # for spl in spls:
+    #     set_id = spl["setid"]
+    #     print(f"Downloading SPL for set_id {set_id} into {output_dir_raw}")
 
-        download_spl_html(
-            set_id=set_id, 
-            download_url=os.getenv('DOWNLOAD_URL'), 
-            output_dir=output_dir_raw
-            )
-        
+
+    pass
 
 if __name__ == "__main__":
     main()
