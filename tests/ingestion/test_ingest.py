@@ -1,5 +1,5 @@
 import unittest
-from toolkit.ingestion.ingest import fetch_spl_list, download_spl_html
+from toolkit.ingestion.ingest import fetch_spl_list, download_spl_xml
 import responses 
 import os 
 
@@ -17,14 +17,14 @@ class TestIngestion(unittest.TestCase):
         })  
 
         list = fetch_spl_list(
-            base_url='http://example.com/api/123',
+            base_uri='http://example.com/api/123',
             limit=1
             )
         
         self.assertEqual("content", list)
 
     @responses.activate
-    def test_download_spl_html(self):
+    def test_download_spl_xml(self):
         set_id  = "test_set_id"
         base_dir = os.getcwd()
         output_dir = os.path.join(base_dir, "tests/ingestion")
@@ -37,10 +37,10 @@ class TestIngestion(unittest.TestCase):
                     'adding_headers': {'X-Foo': 'Bar'}
                 }) 
         
-        download_spl_html(
+        download_spl_xml(
             set_id = set_id,
             output_dir = output_dir, 
-            download_url = 'http://example.com/api/123/'
+            base_uri = 'http://example.com/api/123/'
             )
         
         self.assertEqual(os.path.exists(output_dir), True)
