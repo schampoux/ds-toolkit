@@ -1,40 +1,66 @@
 import os
 import json
-from lxml import html 
+from lxml import etree 
+from typing import Optional 
 
-def parse_drug_label(
-          input_path: str, 
-          output_path: str
-          ):
-    """
-    Parse raw .html input and save to /data/processed directory as .json
-    """
-    with open(file = input_path, mode = 'rb') as file:
-            file_content = file.read()
-            
-    tree = html.fromstring(html = file_content)
-    result = {}
+TARGET_SECTIONS_SET = {
+    'INDICATIONS & USAGE',
+    'WARNINGS',
+    'ADVERSE REACTIONS',
+    'CONTRAINDICATIONS',
+    'ACTIVE INGREDIENTS',
+    'PURPOSE',
+    'USES',
+    'PRODUCT LABEL',
+    'OTHER INFORMATION',
+    'DIRECTIONS',
+    'INACTIVE INGREDIENTS',
+    
+}
 
-    sections = tree.xpath("//h2") 
+def parse_drug_label(input_path: str, output_path: str):
+    with open(input_path, mode = 'rb') as xml_file: 
+        tree = etree.parse(xml_file)
 
-    for heading in sections:
-        title = heading.text_content().strip().upper()
-        content = []
+    root = tree.getroot() 
 
-        next_node = heading.getnext()
-        while next_node is not None and next_node.tag != "h2":
-            content.append(next_node.text_content().strip())
-            next_node = next_node.getnext() 
+    if None in root.nsmap:
+        namespace = root.nsmap.get(None) 
+    else:
+        namespace = 0
+        print("No default namespace")
+    
+    output = {}
 
-        if content:
-            result[title] = "\n\n".join(content)
+    elements_found = find_elements_by_tag(element = root, tag = "section", namespace = namespace)
 
-    os.makedirs(os.path.dirname(output_path), exist_ok = True)
-         
-    with open(output_path, "w") as f:
-         json.dump(result, f)
+    for section in elements_found:
+        # print("section: ", section.tag)
 
-    return 
+        title_element = section.find(f".//{{{namespace}}}title") if namespace else section.find("title")
+        
+        if title_element is not None and title_element.text:
+            title = " ".join(title_element.itertext()).strip().upper()
+            print("\ntitle: ", title)
+
+            if title in TARGET_SECTIONS_SET:
+                text_elements = section.findall(f".//{{{namespace}}}text") if namespace else section.findall("text") # returns a list of matching Elements 
+
+                if not text_elements:
+                    print("findall returned and empty list")
+
+                section_text = " ".join(
+                    " ".join(t.itertext()).strip()
+                    for t in text_elements if t is not None)
+                
+                print("section text: ",section_text)
+                output[title] = section_text
+
+    return output
 
 
-
+def find_elements_by_tag(element, tag, namespace: Optional[str]) -> list[etree.Element]:
+    if namespace:
+        return element.findall(f".//{{{namespace}}}{"section"}")
+    else: 
+        return element.findall(f".//{tag}")
