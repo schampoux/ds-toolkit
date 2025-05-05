@@ -27,13 +27,13 @@ def fetch_metadata(base_url: str, limit: int) -> list[dict[str: Any]]:
 @task 
 def download_html(set_id, download_url, output_dir) -> Path:
     
-    output_path = download_spl_html(
+    file_path = download_spl_html(
         set_id = set_id, 
         download_url=download_url, 
         output_dir=output_dir
         )
     
-    return output_path
+    return file_path
 
 @task
 def parse_and_clean(input_path, output_path):
