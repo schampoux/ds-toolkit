@@ -34,10 +34,12 @@ def download_spl_html(
     response.raise_for_status()
 
     os.makedirs(output_dir, exist_ok=True)
-    with open (os.path.join(output_dir, f"{set_id}.html"), "wb") as f: 
+    file_path = os.path.join(output_dir, f"{set_id}.html")
+
+    with open (file_path, "wb") as f: 
         f.write(response.content) 
 
-    return output_dir
+    return file_path
 
 if __name__ == "__main__":
     BASE_URL = "https://dailymed.nlm.nih.gov/dailymed/services/v2/spls.json"
