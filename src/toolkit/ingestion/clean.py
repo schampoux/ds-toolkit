@@ -29,8 +29,7 @@ def parse_drug_label(
         if content:
             result[title] = "\n\n".join(content)
 
-    if not os.path.exists(output_path): 
-         os.mknod(output_path)
+    os.makedirs(os.path.dirname(output_path), exist_ok = True)
          
     with open(output_path, "w") as f:
          json.dump(result, f)
@@ -38,6 +37,4 @@ def parse_drug_label(
     return 
 
 
-def process_all_tables():
-    pass
 
