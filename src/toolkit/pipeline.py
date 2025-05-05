@@ -16,10 +16,7 @@ load_dotenv()
 # saves clean JSON 
 
 @task 
-def fetch_metadata(
-    base_url: str, 
-    limit: int
-    ) -> list[dict[str: Any]]:
+def fetch_metadata(base_url: str, limit: int) -> list[dict[str: Any]]:
 
     metadata = fetch_spl_list(
         base_url = base_url, 
@@ -28,11 +25,7 @@ def fetch_metadata(
     return metadata
 
 @task 
-def download_html(
-    set_id, 
-    download_url, 
-    output_dir
-    ) -> Path:
+def download_html(set_id, download_url, output_dir) -> Path:
     
     output_path = download_spl_html(
         set_id = set_id, 
@@ -43,8 +36,11 @@ def download_html(
     return output_path
 
 @task
-def parse_and_clean(input_path, output_path) -> Path:
-    return Path 
+def parse_and_clean(input_path, output_path):
+    parse_drug_label(input_path=input_path,
+                     output_path=output_path 
+                     )
+    return
 
 @flow
 def drug_label_pipeline(limit: int):
