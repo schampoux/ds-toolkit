@@ -1,5 +1,5 @@
 from prefect import flow, task
-from toolkit.ingestion.ingest import fetch_spl_list, download_spl_html
+from toolkit.ingestion.ingest import fetch_spl_list, download_spl_xml
 from toolkit.ingestion.clean import parse_drug_label
 from pathlib import Path 
 from dotenv import load_dotenv
@@ -7,29 +7,23 @@ import os
 from typing import Any 
 from datetime import datetime 
 
-
 load_dotenv()
 
-# fetches drug label metadata from DailyMed
-# downloads raw html
-# parses + structures the HTML 
-# saves clean JSON 
-
 @task 
-def fetch_metadata(base_url: str, limit: int) -> list[dict[str: Any]]:
+def fetch_metadata(base_uri: str, limit: int) -> list[dict[str: Any]]:
 
     metadata = fetch_spl_list(
-        base_url = base_url, 
+        base_uri = base_uri, 
         limit = limit
         )
     return metadata
 
 @task 
-def download_html(set_id, download_url, output_dir) -> Path:
+def download_xml(set_id, base_uri, output_dir) -> Path:
     
-    file_path = download_spl_html(
+    file_path = download_spl_xml(
         set_id = set_id, 
-        download_url=download_url, 
+        base_uri=base_uri, 
         output_dir=output_dir
         )
     
@@ -42,6 +36,10 @@ def parse_and_clean(input_path, output_path):
                      )
     return
 
+@task
+def extract_concepts():
+    pass
+
 @flow
 def drug_label_pipeline(limit: int):
     processed_data_dir = "./data/processed"
@@ -49,7 +47,7 @@ def drug_label_pipeline(limit: int):
     output_dir_raw = f"./data/raw/{flow_time}/"
 
     metadata_list_future = fetch_metadata.submit(
-        base_url = os.getenv('BASE_URL'), 
+        base_uri = os.getenv('BASE_URI'), 
         limit = limit
         )
     metadata_list = metadata_list_future.result()
@@ -57,16 +55,18 @@ def drug_label_pipeline(limit: int):
     for spl in metadata_list:
         set_id = spl["setid"]
 
-        raw_path_future = download_html.submit(
+        raw_path_future = download_xml.submit(
             set_id = set_id, 
-            download_url = os.getenv('DOWNLOAD_URL'), 
+            base_uri = os.getenv('BASE_URI'), 
             output_dir = output_dir_raw
             )
+        
         raw_path = raw_path_future.result() 
 
         processed_path = os.path.join(processed_data_dir, flow_time, f"{set_id}.json")
  
-        parse_and_clean.submit(input_path = raw_path, output_path = processed_path)
+        parse_and_clean_future = parse_and_clean.submit(input_path = raw_path, output_path = processed_path)
+        parse_and_clean_future.result()
 
 
 if __name__ == "__main__":
