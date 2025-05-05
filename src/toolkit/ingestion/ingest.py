@@ -9,15 +9,20 @@ import os
 from typing import Any
 from pathlib import Path 
 from datetime import datetime 
+from dotenv import load_dotenv
 
-def fetch_spl_list(
-        base_url: str, 
-        limit: int = 30
-        ) -> list[dict[str: Any]]:
+load_dotenv()
+
+def fetch_spl_list(base_uri: str, limit: int = 30) -> list[dict[str: Any]]:
     
     """ Fetch a list of Structured Product Label (SPL) entries. """
-    response = requests.get(url = base_url,
-                            params = {'pagesize': limit})
+    spl_url = os.path.join(base_uri, "spls.json")
+
+    response = requests.get(
+        url = spl_url,
+        params = {'pagesize': limit}
+        )
+
     response.raise_for_status()
     data = response.json()
     return data.get("data", [])
@@ -41,20 +46,25 @@ def download_spl_html(
 
     return file_path
 
-if __name__ == "__main__":
-    BASE_URL = "https://dailymed.nlm.nih.gov/dailymed/services/v2/spls.json"
-    DOWNLOAD_URL = "https://dailymed.nlm.nih.gov/dailymed/downloadset/"
-
+def main(): 
     flow_time = datetime.time(datetime.now())
     output_dir_raw = f"./data/raw/{flow_time}/"
+    base_uri = os.getenv('BASE_URI')
+    print("BASE_URI: ", base_uri)
 
-    spls = fetch_spl_list(base_url = BASE_URL, limit = 30)
+    spls = fetch_spl_list(base_uri = base_uri, limit = 2)
+    return print(spls)
+
     for spl in spls:
         set_id = spl["setid"]
         print(f"Downloading SPL for set_id {set_id} into {output_dir_raw}")
 
         download_spl_html(
             set_id=set_id, 
-            download_url=DOWNLOAD_URL, 
+            download_url=os.getenv('DOWNLOAD_URL'), 
             output_dir=output_dir_raw
             )
+        
+
+if __name__ == "__main__":
+    main()
