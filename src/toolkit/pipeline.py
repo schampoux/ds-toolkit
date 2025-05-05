@@ -45,28 +45,29 @@ def parse_and_clean(input_path, output_path):
 @flow
 def drug_label_pipeline(limit: int):
     processed_data_dir = "./data/processed"
-    flow_time = datetime.time(datetime.now())
+    flow_time = datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
     output_dir_raw = f"./data/raw/{flow_time}/"
 
-    metadata_list = fetch_metadata(
+    metadata_list_future = fetch_metadata.submit(
         base_url = os.getenv('BASE_URL'), 
         limit = limit
         )
+    metadata_list = metadata_list_future.result()
 
     for spl in metadata_list:
         set_id = spl["setid"]
 
-        download_html(
+        raw_path_future = download_html.submit(
             set_id = set_id, 
             download_url = os.getenv('DOWNLOAD_URL'), 
             output_dir = output_dir_raw
             )
-        
-    for file in os.listdir(output_dir_raw):
-        input_path_raw = os.path.join(output_dir_raw, file)
-        file_name = file + '.json'
-        output_path_processed = os.path.join(processed_data_dir, str(flow_time), file_name)
-        parse_drug_label(input_path = input_path_raw, output_path = output_path_processed)
+        raw_path = raw_path_future.result() 
+
+        processed_path = os.path.join(processed_data_dir, flow_time, f"{set_id}.json")
+ 
+        parse_and_clean.submit(input_path = raw_path, output_path = processed_path)
+
 
 if __name__ == "__main__":
     drug_label_pipeline(limit=2)
