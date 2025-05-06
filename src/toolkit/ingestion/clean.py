@@ -18,25 +18,30 @@ TARGET_SECTIONS_SET = {
     
 }
 
-def parse_drug_label(input_path: str, output_path: str):
-    with open(input_path, mode = 'rb') as xml_file: 
-        tree = etree.parse(xml_file)
-
-    root = tree.getroot() 
-
+def get_namespace(tree: etree.ElementTree):
+    root = tree.getroot()
     if None in root.nsmap:
         namespace = root.nsmap.get(None) 
     else:
         namespace = 0
         print("No default namespace")
+    return namespace 
+
+def create_etree(input_path: str) -> etree.ElementTree:
+    """Create etree from xml file"""
+    with open(input_path, mode = 'rb') as xml_file: 
+        tree = etree.parse(xml_file)
+    return tree
+
+def gather_titles(tree: etree.ElementTree, target_sections: set = TARGET_SECTIONS_SET) -> Dict:
+    root = tree.getroot()
+    namespace = get_namespace(tree=tree)
     
-    output = {}
+    dynamic_titles = set()
 
     elements_found = find_elements_by_tag(element = root, tag = "section", namespace = namespace)
 
     for section in elements_found:
-        # print("section: ", section.tag)
-
         title_element = section.find(f".//{{{namespace}}}title") if namespace else section.find("title")
         
         if title_element is not None and title_element.text:
