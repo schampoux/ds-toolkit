@@ -20,8 +20,10 @@ def fetch_metadata(base_uri: str, limit: int) -> list[dict[str: Any]]:
 
 @task 
 def download_xml(set_id, base_uri, output_dir) -> Path:
-    if not os.path.exists("./data/raw"):
+    if not os.path.exists("data"):
+        os.mkdir("./data")
         os.mkdir("./data/raw")
+        os.mkdir("./data/processed")
 
     file_path = download_spl_xml(
         set_id = set_id, 
@@ -33,9 +35,7 @@ def download_xml(set_id, base_uri, output_dir) -> Path:
 
 @task
 def parse_and_clean(input_path, output_path):
-    if not os.path.exists('./data/processed'):
-        os.mkdir('./data/processed')
-        
+
     parse_drug_label(input_path=input_path,
                      output_path=output_path 
                      )
