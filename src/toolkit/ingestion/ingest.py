@@ -31,7 +31,8 @@ def download_spl_xml(
         output_dir: str
         ) -> Path:
     
-    """Download SPL SML file given a set_id."""
+    """Download SPL .xml file given a set_id."""
+
     download_url_json  = os.path.join(base_uri, f"spls/{set_id}.xml")
     response = requests.get(download_url_json)
     response.raise_for_status()
