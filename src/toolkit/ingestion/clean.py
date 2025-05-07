@@ -1,6 +1,6 @@
 from lxml import etree 
 import json 
-from typing import Optional
+from typing import Optional, Dict
 from pathlib import Path 
 import os 
 
@@ -19,7 +19,7 @@ TARGET_SECTIONS_SET = {
 }
 
 
-def parse_drug_label(input_path: str, output_path: str):
+def parse_drug_label(input_path: str, output_path: str) -> Dict:
 
     with open(input_path, mode = 'rb') as xml_file: 
         tree = etree.parse(xml_file)
