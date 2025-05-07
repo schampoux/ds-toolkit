@@ -6,13 +6,27 @@ from typing import Dict
 
 nlp = spacy.load("en_core_web_sm")
 
-def extract_entities_from_section(text: str) -> Dict[str, list[dict]]:
+def extract_entities_from_dict(input_dict: Dict) -> Dict[str, list[Dict[str, str]]]:
     # Language object 
     nlp = spacy.load("en_core_web_sm")
 
-    # Calling the nlp object on a string of text will return a processed Doc object 
-    doc = nlp(text)
-    entities = list(
-        {"text": ent.text, "label": ent.label_} for ent in doc.ents
-        )
-    return {'entities': entities}
+    # create dict { section : doc object}
+    sections_doc = {}
+    for section, text in input_dict.items():
+        if text:
+            sections_doc[section] = nlp(' '.join(text.split()))
+        else: 
+            sections_doc[section] = ''
+
+    # create output   
+    entities = {}
+    if sections_doc:
+        for section, doc in sections_doc.items():
+            if type(sections_doc[section]) == spacy.tokens.doc.Doc:
+                entities[section] = [{'text': ents.text, 'label': ents.label_} for ents in doc.ents]
+
+            else: 
+                continue 
+    
+
+    return entities
