@@ -5,13 +5,13 @@ This project ingests unstructured drug labeling data from the [DailyMed](https:/
 
 ## Tech Stack 
 - Python 
-- `requests`, `lxml`, `json`
+- `requests`, `lxml`, `json`, `spacy`
 - Basic CLI orchestration
 
 ## Workflow
 1. `ingest.py`: Downloads HTML files using the DailyMed SPL web service. 
 2. `clean.py`: Parses HTML sections using LXML and extracts clinical sections like "INDICATIONS", "WARNINGS", etc. 
-3. Outputs are saved as structured JSON to `data/processed`.
+3. `nlp.py`: analyzes sections and creates entity dicts. 
 
 ## Example Output 
 
