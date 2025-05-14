@@ -74,6 +74,6 @@ def parse_drug_label(input_path: str, output_path: str) -> Dict:
 
 def find_elements_by_tag(element, tag, namespace: Optional[str]) -> list[etree.Element]:
     if namespace:
-        return element.findall(f".//{{{namespace}}}{"section"}")
+        return element.findall(f".//{{{namespace}}}section")
     else: 
         return element.findall(f".//{tag}")
