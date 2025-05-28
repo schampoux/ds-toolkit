@@ -1,0 +1,21 @@
+=====================
+CORRELATION MATRICES
+=====================
+
+df.corr()
+
+Compute a pairwise correlation of columns in a DF using the Pearson Correlation Coefficient by default. 
+
+Pearson Correlation: 
+    r = cov(X,Y)/(sd_x)(sd_y)
+
+This method: 
+    1. Standardizes each column by subtracting the mean and dividing by its standard deviation. 
+    2. Computes the covariance between each pair of columns. 
+    3. Divides the covariance by the product of the standard deviations. 
+
+The result is a square matrix (DF) where each cell (i,j) represents the correlation coefficient between column i and column, j
+    - 1.0: Perfect positive correlation (as one increases, so does the other). 
+    - 0.0: No linear correlation 
+    - (-1.0): Perfect negative correlation (as one increases, the other decreases). 
+    
