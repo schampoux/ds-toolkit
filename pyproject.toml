@@ -7,7 +7,18 @@ name = "toolkit"
 description = "Data science toolkit"
 authors = [{ email = "sergiochampoux@gmail.com"}]
 version = "0.1.0"
-
+dependencies = [
+    "lxml==5.4.0",
+    "matplotlib==3.10.3",
+    "numpy==2.2.5",
+    "pandas==2.2.3",
+    "prefect==3.4.1",
+    "python-dotenv==1.1.0",
+    "Requests==2.32.3",
+    "responses==0.25.7",
+    "scikit_learn==1.6.1",
+    "spacy==3.8.5"
+]
 [project.scripts] 
 # for CLI later use 
 toolkit = "main:main" 
