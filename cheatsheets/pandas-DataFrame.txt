@@ -140,7 +140,19 @@ df.nunique()          # Count of unique values per column
 
 pd.read_csv('file.csv')                     # Read CSV
                                             # optional args: 
-                                                usecols=['',''] to reduce memory footprint
+                                                usecols = ['',''] (to reduce memory footprint)
+                                                low_memory = False (see below) 
+                                                dtype = {'column', dtype}
+                                            # Pandas tries to infer each column's dtype. 
+                                                If the values can all be turned into integers, it chooses int64 
+                                                If the values can all be turned into floats, which includes nan, it chooses float64 
+                                                Otherwise it chooses object, meaning core Python objects. 
+
+                                            # We often do not need 64-bit, so feel free to specify dtypes if you know them 
+
+                                            # With large datasets, pandas loads them in chunks. 
+                                                It may return 'object' if the dtype at the beginning of a column (in one chunk) 
+                                                is different from the dtype of the same column in a later chunk. 
 
 pd.read_table('file.txt')                   # Read delimited text
 pd.read_excel('file.xlsx')                  # Read Excel file
