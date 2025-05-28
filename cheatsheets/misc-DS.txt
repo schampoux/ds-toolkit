@@ -1,0 +1,12 @@
+Outliers: 
+    This term does not have a precise standard definition. Many people define it using the innerquartile range (IQR)
+    IQR - The difference between the 75th and 25th percentiles. 
+        - The value at the 75% point (.quantile(.75)) minus the value at the 25% point
+    Outliers are then values below the 25% point - 1.5*IQR or values above the 75% + 1.5*IQR
+
+np.nan
+    - float 
+    - not equal to itself
+    - cant be converted into an int
+    - search for them using `isnan()` in NumPy
+    - 

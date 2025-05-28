@@ -1,0 +1,207 @@
+==================== Array Basics ====
+
+Arrays allow batch operations (vectorization) on data without writing any for loops.
+    - Element-wise operations on arrays of equal size
+    - Arithmetic operations with scalars propagate the scalar argument to each element
+        Example: `1 / array1` applies `1 / x` element-wise
+
+Broadcasting evaluates operations between differently sized arrays.
+
+==== Creating Arrays ====
+ndarray
+    - N-dimensional container for homogeneous data (same data type)
+    - Commonly referred to as "array", "NumPy array", or "ndarray"
+
+np.array(data)
+    - Accepts list-like input, including lists of equal-length lists
+    - Infers a data type automatically
+
+np.zeros(shape)
+np.zeros_like(a)
+np.ones(shape)
+np.ones_like(a)
+np.empty(shape)
+    - Creates an array without initializing values to any particular value
+
+np.arange(start, stop, step)
+np.full(shape, fill_value)
+np.full_like(a, fill_value)
+np.eye(N, M)
+    - Returns an identity matrix with N rows and M columns
+
+==== Array Attributes ====
+.shape      - Tuple of dimensions
+.dtype      - Data type metadata
+.ndim       - Number of dimensions
+
+==== Array Methods ====
+arr.astype(dtype)
+    - Convert to a different type (e.g., float -> int)
+    - Can truncate decimals
+
+arr.T or arr.transpose()
+    - Transpose (swap axes)
+
+arr.swapaxes(axis1, axis2)
+arr.sort(axis=0)
+    - Sort array in-place along given axis
+
+==== NumPy Methods ====
+np.reshape(a, shape)
+    - New shape without modifying data
+
+np.shape(a)
+    - Returns shape tuple of array
+
+np.dot(a, b), a.dot(b)
+    - Dot product of two arrays
+
+np.sort(array)
+    - Returns a sorted copy of the array
+
+np.unique(array)
+    - Sorted unique values
+
+np.in1d(values, array)
+    - Tests membership, returns boolean array
+
+np.intersect1d(x, y)
+np.union1d(x, y)
+np.setdiff1d(x, y)
+np.setxor1d(x, y)
+    - Set operations on arrays
+
+==================== Indexing & Slicing ====
+
+Array slices return views (not copies) of the data.
+    - Modifications affect the original array
+
+Boolean indexing creates a copy
+    - `arr1[arr1 < 0] = 0` sets negative values to 0
+
+1D arrays behave similarly to Python lists
+    - Assigning to a slice broadcasts the value
+
+==================== Boolean Arrays ====
+
+Boolean arrays can be used for filtering
+    - Always returns a copy
+
+arr.sum()     - Number of True values
+arr.any()     - Any True?
+arr.all()     - All True?
+
+==== Math & Statistics ====
+Aggregations (all support `axis` argument):
+arr.sum(), 
+arr.mean(), 
+arr.std(), 
+arr.var()
+arr.min(), 
+arr.max(), 
+arr.argmin(), 
+arr.argmax()
+arr.cumsum() 
+    - Cumulative sum
+arr.cumprod() 
+    - Cumulative product
+
+==================== Random Number Generation ====
+
+random.seed(seed)             - Set global RNG seed
+random.RandomState(seed)      - Create isolated RNG
+random.rand(), 
+random.uniform()
+random.randn(), 
+random.normal(size)
+random.randint()
+random.binomial(), 
+random.beta(), 
+random.chisquare(), 
+random.gamma()
+random.permutation()          
+    - Random permuted sequence
+random.shuffle()              
+    - In-place permutation
+
+==================== Universal Functions (ufuncs) ====
+
+Unary ufuncs (one input array):
+np.sqrt(), 
+np.exp(), 
+np.abs(), 
+np.fabs(), 
+np.square()
+np.log(), 
+np.log10(), 
+np.log2(), 
+np.log1p()
+np.sign(), 
+np.ceil(), 
+np.floor(), 
+np.rint()
+np.modf(), 
+np.isnan(), 
+np.isfinite(), 
+np.isinf()
+np.cos(), 
+np.arccos(), 
+np.cosh(), 
+np.arccosh()
+np.sin(), 
+np.arcsin(), 
+np.sinh(), 
+np.arcsinh()
+np.tan(), 
+np.arctan(), 
+np.tanh(), 
+np.arctanh()
+np.logical_not()
+
+Binary ufuncs (two input arrays):
+np.add(), 
+np.subtract(), 
+np.multiply(), 
+np.divide(), 
+np.floor_divide()
+np.power(), 
+np.maximum(), 
+np.fmax(), 
+np.minimum(), 
+np.fmin()
+np.mod(), 
+np.copysign()
+np.greater(), 
+np.greater_equal(), 
+np.less(), 
+np.less_equal()
+np.equal(), 
+np.not_equal()
+np.logical_and(), 
+np.logical_or(), 
+np.logical_xor()
+
+==================== Miscellaneous ====
+
+np.meshgrid(arr1, arr2)
+    - Return coordinate matrices from coordinate vectors
+
+np.where(condition, x, y)
+    - Return elements from `x` or `y` depending on condition
+        Example: `np.where(arr > 0, 2, -2)`
+
+==================== Linear Algebra ====
+
+arr.dot(y), np.dot(arr, y)
+@ (matrix multiplication operator)
+
+np.diag(), 
+np.trace(), 
+np.linalg.det(), 
+np.linalg.eig()
+np.linalg.inv(), 
+np.linalg.pinv(), 
+np.linalg.qr()
+np.linalg.svd(), 
+np.linalg.solve(), 
+np.linalg.lstsq()

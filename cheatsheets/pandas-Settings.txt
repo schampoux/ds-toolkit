@@ -1,0 +1,29 @@
+=====================
+PANDAS SETTINGS
+=====================
+
+
+# ----------------------
+# Syntax
+# ----------------------
+
+Using a format string literal and a lambda function
+    lambda x: f"{x:.2f}"
+
+        x is the number 
+        : starts the format spec 
+        .2 defiunes the number of digits after the decimal 
+        f means fixed-point notation (i.e. not scientific)
+
+
+# ----------------------
+# Setting Options 
+# ----------------------
+
+pd.set_option('option', function())
+
+    Ex: pd.set_option('display.float_format', lambda x f"{x:,.2f}")
+
+pd.set_eng_float_format(accuracy: int, use_eng_prefix: bool)
+    accuracy is the number of decimal digits after thefloating point
+    use_eng_prefix: indicate whether to represent values with SI prefixes

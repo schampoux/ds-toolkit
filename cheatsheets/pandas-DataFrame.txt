@@ -1,0 +1,170 @@
+=====================
+PANDAS CHEATSHEET
+=====================
+
+# ----------------------
+# Creating Test Objects
+# ----------------------
+
+pd.DataFrame(np.random.rand(20, 5))                  # 5 columns and 20 rows of random floats
+pd.Series(my_list)                                   # Create Series from iterable `my_list`
+pd.date_range('1900-01-30', periods=df.shape[0])     # Create date range to use as index
+df.index = pd.date_range(...)                        # Set datetime index
+pd.DataFrame({'col1': [1, 2], 'col2': [3, 4]})        # From dict of lists
+
+# -------------------------
+# Viewing / Inspecting Data
+# -------------------------
+
+df.head(n)                      # First n rows
+df.tail(n)                      # Last n rows
+df.shape                        # (rows, columns)
+df.info()                       # Index, dtypes, memory usage
+df.describe()                   # Summary stats for numerical columns
+df.dtypes                       # Data types of each column
+df.columns                      # Column names
+df.index                        # Index object
+df.sample(n)                    # Random sample of n rows
+s.value_counts(dropna=False)   # Counts of unique values in a Series
+df.apply(pd.Series.value_counts)   # Unique values and counts for all columns
+
+# ----------------
+# Selection & Indexing
+# ----------------
+
+df[col]                         # Column as Series
+df[[col1, col2]]                # Subset of columns
+
+s.iloc[0]                       # Select by position
+s.loc['index_one']              # Select by label
+
+df.loc['row1', 'col1']                      # select by index and column name 
+df.loc[['row1','row2'], 'col1']             # select by list of index and column name 
+df.loc['row1', ['col1','col2'] ]            # select by rown name and list of column names 
+df.loc[['row1', 'row2'], ['col1','col2']]   # select using two lists 
+
+# Describe rows using a bool index 
+df.loc[df['x'] > 200]                       # Conditional filtering 
+df[df['col'] > 0.6]                         # Conditional filtering
+df[(df[col] > 0.6) & (df[col] < 0.8)]       # Multiple conditions
+df[df['col'].isin([1, 2, 3])]                  # Filter where column is in list
+df.loc[                                     
+    df['col'] > 200,                        # all rows in which column 'col' > 200 
+    df.loc['row'] > 135                      # all columns in which 'row' > 135
+]
+
+df.iloc[0, :]                   # First row
+df.iloc[0, 0]                   # First element of first column
+df.at[5, 'col1']                # Fast access by label
+df.iat[5, 1]                    # Fast access by position
+
+df.query("col > 0.6")           # SQL-like filtering
+                                # on df's > 10k rows, this is significantly faster.
+
+# ----------------
+# Data Cleaning
+# ----------------
+
+df.columns = ['a', 'b', 'c']                   # Rename all columns
+df.rename(columns={'old_name': 'new_name'})   # Rename selected columns
+df.rename(columns=lambda x: x + "_new")       # Mass rename with function
+df.set_index('column_one')                    # Set index to column
+df.reset_index()                              # Reset index to default
+df.rename(index=lambda x: x + 1)              # Rename index
+pd.isnull(df)                                 # Detect null values
+pd.notnull(df)                                # Opposite of isnull
+df.dropna()                                   # Drop rows with nulls
+df.dropna(axis=1)                             # Drop columns with nulls
+df.dropna(axis=1, thresh=n)                   # Keep columns with ≥ n non-null
+df.fillna(x)                                  # Replace nulls with x
+df.fillna(method='ffill')                     # Forward fill
+df.fillna(method='bfill')                     # Backward fill
+s.fillna(s.mean())                            # Fill nulls with mean
+s.replace(1, 'one')                           # Replace 1 with 'one'
+s.replace([2, 3], ['two', 'three'])           # Replace multiple values
+s.astype(float)                               # Cast type
+df.duplicated()                               # Detect duplicate rows
+df.drop_duplicates()                          # Drop duplicates
+df = df.interpolate                           # estimate unknown values that fall within the range of known data points
+
+# -------------------------------
+# Filtering, Sorting, Grouping
+# -------------------------------
+
+df[df[col] > 0.6]                              # Filter rows
+df.sort_values(col1)                          # Sort by col1 ascending
+df.sort_values(col2, ascending=False)         # Sort by col2 descending
+df.sort_values([col1, col2], ascending=[True, False])  # Multi-sort
+df.groupby(col)                               # Group by single column
+df.groupby([col1, col2])                      # Group by multiple columns
+df.groupby(col1)[col2].mean()                 # Group by col1, mean of col2
+df.groupby(col1).agg(np.mean)                 # Group + aggregate all columns
+df.pivot_table(index=col1, values=[col2, col3], aggfunc='mean')  # Pivot table
+df.apply(np.mean)                             # Column-wise mean
+df.apply(np.max, axis=1)                      # Row-wise max
+df.assign(column_to_add = value)              # returns a new df, keyword arguments result in a new column
+                                               
+# -------------------
+# Joining / Combining
+# -------------------
+
+pd.concat([df1, df2], axis=0)                 # Stack vertically
+pd.concat([df1, df2], axis=1)                 # Stack horizontally
+df1.merge(df2, on='key')                      # Merge on key
+df1.merge(df2, on='key', how='outer')         # Outer join
+df1.join(df2, on='col1', how='inner')         # Join by index/column
+df1.combine_first(df2)                        # Combine with df2 using df1 values as priority
+
+# ----------------
+# Statistics
+# ----------------
+
+df.describe()         # Summary statistics
+df.mean()             # Mean of each column
+df.median()           # Median of each column
+df.std()              # Standard deviation
+df.var()              # Variance
+df.min()              # Min values
+df.max()              # Max values
+df.count()            # Non-NaN counts
+df.sum()              # Column-wise sum
+df.cumsum()           # Cumulative sum
+df.cummax()           # Cumulative max
+df.corr()             # Correlation matrix
+df.corrwith()         # Correlation matrix with another series or data frame 
+df.nunique()          # Count of unique values per column
+
+# ----------------
+# Importing Data
+# ----------------
+
+pd.read_csv('file.csv')                     # Read CSV
+                                            # optional args: 
+                                                usecols=['',''] to reduce memory footprint
+
+pd.read_table('file.txt')                   # Read delimited text
+pd.read_excel('file.xlsx')                  # Read Excel file
+pd.read_sql(query, conn)                    # Read SQL query or table
+pd.read_json('file.json')                   # Read JSON file/string/URL
+pd.read_html('http://...')                  # Parse HTML table(s)
+pd.read_clipboard()                         # Paste table from clipboard
+pd.DataFrame.from_dict(my_dict)             # From dict to DataFrame
+
+# ----------------
+# Exporting Data
+# ----------------
+
+df.to_csv('file.csv')                       # Write CSV
+df.to_excel('file.xlsx')                    # Write Excel file
+df.to_sql('table', conn)                    # Write to SQL database
+df.to_json('file.json')                     # Write to JSON
+
+# ----------------
+# Other Useful Tricks
+# ----------------
+
+df['new_col'] = df['col1'] + df['col2']      # Create new column
+df['col'].map(lambda x: x * 2)               # Element-wise transformation
+df['col'].apply(my_func)                     # Apply custom function
+df.explode('col')                            # Split list-like values into rows
+df.transpose()                               # Transpose DataFrame

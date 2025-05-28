@@ -1,0 +1,142 @@
+========================
+PANDAS SERIES CHEATSHEET
+========================
+
+# ----------------
+# Creating Series
+# ----------------
+
+pd.Series([1, 2, 3])                          # From list
+pd.Series({'a': 1, 'b': 2})                   # From dict (keys become index)
+pd.Series(np.arange(5))                       # From NumPy array
+pd.Series(5, index=['a', 'b', 'c'])           # Scalar repeated for index
+pd.Series(my_list, name='my_series')          # With name
+
+# -------------------------
+# Indexing & Selection`
+# -------------------------
+
+s[0]                                          # First element (positional)
+s[:3]                                         # First 3 elements
+s['a']                                        # Access by label
+s.loc['a']                                    # Label-based indexing
+s.iloc[0]                                     # Positional indexing
+s.get('a', default=0)                         # Safe access with default
+
+# -------------------------
+# Vectorized Operations`
+# -------------------------
+
+s + 10                                        # Add scalar to each element
+s1 + s2                                       # Element-wise addition
+s1 * s2                                       # Element-wise multiplication
+s ** 2                                        # Exponentiation
+np.log(s)                                     # Apply NumPy function
+
+# -------------------------
+# Aggregation & Statistics
+# -------------------------
+
+s.sum()                                       # Sum of elements
+s.mean()                                      # Mean
+s.std()                                       # Standard deviation
+s.var()                                       # Variance
+s.min(), s.max()                              # Min and max
+s.idxmin(), s.idxmax()                        # Index of min/max
+s.count()                                     # Non-null count
+s.nunique()                                   # Number of unique values
+s.unique()                                    # Unique values
+s.mode()                                      # Mode(s)
+s.describe()                                  # Summary statistics
+
+# -------------------------
+# Value Counts & Membership
+# -------------------------
+
+s.value_counts(dropna=False)                 # Count of unique values
+s.isin([1, 2])                                # Check membership
+s.duplicated()                                # Detect duplicates
+
+# -------------------------
+# Filtering & Boolean Indexing
+# -------------------------
+
+s[s > 0]                                      # Filter values > 0
+s[(s > 0) & (s < 10)]                         # Compound conditions
+s.where(s > 0, other=0)                       # Replace values not > 0
+s.mask(s > 0, other=0)                        # Replace values > 0
+
+# -------------------------
+# Null Handling
+# -------------------------
+
+pd.isnull(s)                                  # Detect nulls
+pd.notnull(s)                                 # Invert null detection
+s.dropna()                                    # Remove nulls
+s.fillna(0)                                   # Replace nulls with scalar
+s.fillna(method='ffill')                      # Forward fill
+s.fillna(method='bfill')                      # Backward fill
+
+# -------------------------
+# Type Conversion
+# -------------------------
+
+s.astype(int)                                 # Convert to integer
+s.astype('category')                          # Convert to category
+s.astype(str)                                 # Convert to string
+
+# -------------------------
+# String Operations (on str Series)
+# -------------------------
+
+s.str.upper()                                 # Convert to uppercase
+s.str.lower()                                 # Convert to lowercase
+s.str.contains('abc')                         # Check substring
+s.str.replace('a', 'b')                       # Replace substring
+s.str.len()                                   # Length of each string
+s.str.strip()                                 # Remove whitespace
+s.str.extract(r'(\d+)')                       # Extract regex group
+
+# -------------------------
+# Datetime Operations
+# -------------------------
+
+pd.to_datetime(s)                             # Convert to datetime
+s.dt.year, s.dt.month, s.dt.day               # Extract components
+s.dt.weekday                                  # Day of week (Mon=0)
+s.dt.strftime('%Y-%m-%d')                     # Format as string
+
+# -------------------------
+# Map, Apply, and Transform
+# -------------------------
+
+s.map({'a': 1, 'b': 2})                        # Map values using dict
+s.map(lambda x: x ** 2)                        # Element-wise function
+s.apply(np.sqrt)                              # Apply function (slower than map)
+s.transform(lambda x: x - x.mean())           # Transform while preserving shape
+
+# -------------------------
+# Sorting
+# -------------------------
+
+s.sort_values()                               # Sort by values
+s.sort_index()                                # Sort by index
+s.rank()                                      # Rank elements
+s.argsort()                                   # Return indices that would sort
+
+# -------------------------
+# Combining Series
+# -------------------------
+
+s1.append(s2)                                 # Append (deprecated; use concat)
+pd.concat([s1, s2])                            # Concatenate series
+s.combine(s2, max)                            # Combine with element-wise function
+s.combine_first(s2)                           # Combine, using s1's values as default
+
+# -------------------------
+# Reshaping
+# -------------------------
+
+s.to_frame()                                  # Convert to DataFrame
+s.reset_index()                               # Reset index
+s.rename('new_name')                          # Rename Series
