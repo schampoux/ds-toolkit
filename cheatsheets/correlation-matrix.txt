@@ -1,6 +1,11 @@
 =====================
-CORRELATION MATRICES
+PEARSON CORRELATION 
 =====================
+
+This method should be used if:
+    - you expect a linear relationship between the coefficients 
+    - both variables are continuous
+    - both variables are normally distributed 
 
 df.corr()
 
@@ -18,4 +23,25 @@ The result is a square matrix (DF) where each cell (i,j) represents the correlat
     - 1.0: Perfect positive correlation (as one increases, so does the other). 
     - 0.0: No linear correlation 
     - (-1.0): Perfect negative correlation (as one increases, the other decreases). 
-    
+
+=========================
+SPEARMAN RANK CORRELATION 
+=========================
+
+Non-parametric alternative to Pearson correlation, often used when data is not normally distributed and the relationship is not linear. 
+
+df.corr(method = 'spearman')
+
+This method converts values to ranks, then calculates Pearson corr on the ranked data. 
+    - Handles nonlinear but monotonic relationships. 
+    - Less sensitive to outliers than Pearson. 
+    - Perfect Spearman correlation: all data points lie on a monotonic function. 
+
+=========================
+KENDALL'S TAU CORRELATION 
+=========================
+
+Measures monotonic association via a different approach by counting concordant and discordant pairs. 
+    - More robust and interpretable in terms of probability. 
+    - More conservative (values closer to 0 compared to Spearman). 
+    - Slower to compute for large datasets. 
