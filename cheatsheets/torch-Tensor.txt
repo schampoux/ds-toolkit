@@ -1,0 +1,88 @@
+http://pytorch.org/docs
+
+stride: 
+    a tuple indicating the number of elements in the storage that have to be skipped when the index is increased by 1 in each dimension. 
+Contiguous 
+    a tensor whose values are laid out in the storage - 
+        starting from the rightmost dimension onward
+
+
+# ----------------
+# Storage
+# ----------------
+
+The storage holds the elements in the tensor sequentially, row by row. 
+
+
+Values in tensors are allocsted in contiguous chunks of memory managed by `torch.Storage` instances.
+    One dimensional array of numerical data. 
+    A contiguous block of memory containing numbers of a gviven type. 
+
+A pytorch tensor instance is a view of such a storage instance that is capable of indexing into that storage using an offset and per-dimension strides. 
+
+# --------------------
+# In-place operations 
+# --------------------
+
+Indicated by a trailing underscore in the name. 
+tensor.zero_()                                            # returns a tensor of zero's 
+
+
+# ----------------
+# Dtypes
+# ----------------
+
+torch.float32 or torch.float: 32-bit floating-point
+
+torch.float64 or torch.double: 64-bit, double-precision floating-point
+
+torch.float16 or torch.half: 16-bit, half-precision floating-point
+
+torch.int8: signed 8-bit integers
+
+torch.uint8: unsigned 8-bit integers
+
+torch.int16 or torch.short: signed 16-bit integers
+
+torch.int32 or torch.int: signed 32-bit integers
+
+torch.int64 or torch.long: signed 64-bit integers
+
+torch.bool: Boolean
+
+When mixing input types in operations, the inputs are converted to the larger type automatically. 
+
+torch.zeros(10, 2).double()                  Cast the output of a tensor creation function to the right type using the corresponding casting method. 
+torch.zeros(10, 2).short()
+torch.zeros(10, 2).to(torch.double)          Checks whether the conversion is necessary and if so, does it. 
+torch.ones(10, 2).to(dtype=torch.short)
+
+
+# ----------------------------------------
+# Indexing, Slicing, Joining, Mutating Ops 
+# ----------------------------------------
+
+Transposing: 
+    Changing the order of the elements in the stride. 
+    No new memory is allocated 
+
+torch.transpose(tensor, dim1, dim2)          Transpose the tensor given the dimensions (dim1, dim2) to swap
+t.transpose(dim1, dim2)            
+t.t()                                        Shorthand function to transpose for 2D tensors 
+t.clone()                                    Clone into a new tensor. 
+
+# ----------------
+# Creation Ops 
+# ----------------
+
+torch.ones()
+torch.from_numpy()
+
+
+# ----------------
+# Random Sampling
+# ----------------
+
+# ----------------
+# Parallellism
+# ----------------
