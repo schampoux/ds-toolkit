@@ -1,5 +1,8 @@
 http://pytorch.org/docs
 
+Default numeric type in PyTorch is 32-bit floating-point.
+Default numeric type in NumPy is 64-bit 
+
 stride: 
     a tuple indicating the number of elements in the storage that have to be skipped when the index is increased by 1 in each dimension. 
 Contiguous 
@@ -71,12 +74,26 @@ t.transpose(dim1, dim2)
 t.t()                                        Shorthand function to transpose for 2D tensors 
 t.clone()                                    Clone into a new tensor. 
 
+
 # ----------------
 # Creation Ops 
 # ----------------
 
 torch.ones()
 torch.from_numpy()
+tensor_.numpy()                                # convert a tensor to a numpy array 
+
+
+When using tensor_.numpy(), torch.from_numpy(np.array): 
+
+    A NumPy multidimensional array of the right size, shape, and dtype will be returned. 
+    The returned array shares the same underlying buffer with the tensor storage. 
+        (This method can be executed at basically no cost) 
+    Modifying the NumPy array will lead to a change in the originating tensor. 
+    If the tensor is allocated on the GPU, 
+        PyTorch will make a copy of the content of the tensor into a NumPy array allocated on the CPU 
+    
+    When changing, Numpy defaults to 64-bit, so make sure when you go back to tensor, you have dtype of torch.float (32-bit) 
 
 
 # ----------------
