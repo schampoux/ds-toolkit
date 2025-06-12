@@ -86,3 +86,11 @@ torch.from_numpy()
 # ----------------
 # Parallellism
 # ----------------
+
+torch.tensor([[... , ...], [... , ...]], device = 'cuda')       # assign to GPU on creation 
+torch.tensor([[... , ...], [... , ...]], device = 'cuda:0')     # (multiple gpu machine) assign to GPU 0 on creation 
+
+tensor_.to(device='cuda')                                             # Assign existing object 
+tensor_ = tensor_.cuda()                                        # assign to cuda device, default 0
+tensor_ = tensor_.cpu()                                         # assign to CPU device
+
