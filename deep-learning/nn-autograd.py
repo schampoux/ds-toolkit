@@ -60,9 +60,13 @@ def training_loop_v(n_epochs, optimizer, params, train_t_u, train_t_c, val_t_u, 
         train_t_p = model(train_t_u, *params)
         train_loss = loss_fn(train_t_p, train_t_c)
 
-        # Compute validation set loss for monitoring during training
-        val_t_p = model(val_t_u, *params)
-        val_loss = loss_fn(val_t_p, val_t_c)
+        with torch.no_grad():
+            # Compute validation set loss for monitoring during training
+            val_t_p = model(val_t_u, *params)
+            val_loss = loss_fn(val_t_p, val_t_c)
+
+            # No need to build the autograd graph on val_loss
+            assert val_loss.requires_grad == False 
 
         optimizer.zero_grad()
         train_loss.backward()
