@@ -23,6 +23,7 @@ def loss_fn(t_p, t_c):
 def training_loop(n_epochs, learning_rate, params, t_u, t_c):
     for epoch in range(1, n_epochs + 1):
 
+        # Zero the gradients, preventing accumulation
         if params.grad is not None: 
             params.grad.zero_()
 
@@ -30,6 +31,7 @@ def training_loop(n_epochs, learning_rate, params, t_u, t_c):
         loss = loss_fn(t_p, t_c)
         loss.backward() 
 
+        # Perform optimization step, updating params
         with torch.no_grad():
             params -= learning_rate * params.grad
 
@@ -43,15 +45,11 @@ def training_loop_sgd(n_epochs, optimizer, params, t_u, t_c):
     for epoch in range(1, n_epochs+1):
         t_p = model(t_u, *params)
         loss = loss_fn(t_p, t_c)
-        
-        # Zero the gradients
+
         optimizer.zero_grad()
         loss.backward()
-
-        # Update params
         optimizer.step()
 
-        # Log
         if epoch % 500 == 0: 
             print(f'Epoch {epoch}, Loss {float(loss)}')
 
