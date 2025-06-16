@@ -143,6 +143,7 @@ pd.read_csv('file.csv')                     # Read CSV
                                                 usecols = ['',''] (to reduce memory footprint)
                                                 low_memory = False (see below) 
                                                 dtype = {'column', dtype}
+
                                             # Pandas tries to infer each column's dtype. 
                                                 If the values can all be turned into integers, it chooses int64 
                                                 If the values can all be turned into floats, which includes nan, it chooses float64 
@@ -153,7 +154,8 @@ pd.read_csv('file.csv')                     # Read CSV
                                             # With large datasets, pandas loads them in chunks. 
                                                 It may return 'object' if the dtype at the beginning of a column (in one chunk) 
                                                 is different from the dtype of the same column in a later chunk. 
-
+                                                low_memory=False avoids this 
+                                                
 pd.read_table('file.txt')                   # Read delimited text
 pd.read_excel('file.xlsx')                  # Read Excel file
 pd.read_sql(query, conn)                    # Read SQL query or table
