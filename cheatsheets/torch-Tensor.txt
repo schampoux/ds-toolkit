@@ -3,6 +3,11 @@ http://pytorch.org/docs
 Default numeric type in PyTorch is 32-bit floating-point.
 Default numeric type in NumPy is 64-bit 
 
+Scalars representing values at individual pixels are often encoded using 8-bit integers, as in consumer cameras 
+Higher numerical precision, such as 12-bit or 16-bit can also be found in medical, scientific, and industrial applications. 
+
+PyTorch uses pickle under the hood to serialize the tensor object. 
+
 stride: 
     a tuple indicating the number of elements in the storage that have to be skipped when the index is increased by 1 in each dimension. 
 Contiguous 
@@ -10,9 +15,9 @@ Contiguous
         starting from the rightmost dimension onward
 
 
-# ----------------
+# --------------------------------------------------------------------------------------------------------------------
 # Storage
-# ----------------
+# --------------------------------------------------------------------------------------------------------------------
 
 The storage holds the elements in the tensor sequentially, row by row. 
 
@@ -23,17 +28,18 @@ Values in tensors are allocsted in contiguous chunks of memory managed by `torch
 
 A pytorch tensor instance is a view of such a storage instance that is capable of indexing into that storage using an offset and per-dimension strides. 
 
-# --------------------
+# ------------------------------------------------------------------------------------------------------------------------
 # In-place operations 
-# --------------------
+# ------------------------------------------------------------------------------------------------------------------------
 
-Indicated by a trailing underscore in the name. 
+    ****Indicated by a trailing underscore in the name****
+
 tensor.zero_()                                            # returns a tensor of zero's 
 
 
-# ----------------
+# --------------------------------------------------------------------------------------------------------------------
 # Dtypes
-# ----------------
+# --------------------------------------------------------------------------------------------------------------------
 
 torch.float32 or torch.float: 32-bit floating-point
 
@@ -61,9 +67,9 @@ torch.zeros(10, 2).to(torch.double)          Checks whether the conversion is ne
 torch.ones(10, 2).to(dtype=torch.short)
 
 
-# ----------------------------------------
+# --------------------------------------------------------------------------------------------------------------------------------------------
 # Indexing, Slicing, Joining, Mutating Ops 
-# ----------------------------------------
+# --------------------------------------------------------------------------------------------------------------------------------------------
 
 Transposing: 
     Changing the order of the elements in the stride. 
@@ -75,9 +81,29 @@ t.t()                                        Shorthand function to transpose for
 t.clone()                                    Clone into a new tensor. 
 
 
-# ----------------
+# --------------------------------------------------------------------------------------------------------------------
 # Creation Ops 
-# ----------------
+# --------------------------------------------------------------------------------------------------------------------
+
+torch.save(tensor_, '../path/path.t')
+
+with open('../path/path.t', 'wb') as f:
+    torch.save(tensor_, f) 
+
+torch.load('../path/path.t)
+
+with open('../path/path.t', 'wb') as f: 
+    torch.load(tensor_, f)
+
+Serializing to HDF5 with h5py 
+    The file format above is not interoperable: we can't read the tensor with software other than pytorch 
+
+    import h5py 
+    f = h5py.File('../path/path.hdf5', 'w')
+    dset = f.create_dataset('coords', data=tensor_.numpy()) # coords is a key into the hdf5 file
+    f.close()
+
+
 
 torch.ones()
 torch.from_numpy()
@@ -96,13 +122,13 @@ When using tensor_.numpy(), torch.from_numpy(np.array):
     When changing, Numpy defaults to 64-bit, so make sure when you go back to tensor, you have dtype of torch.float (32-bit) 
 
 
-# ----------------
+# --------------------------------------------------------------------------------------------------------------------
 # Random Sampling
-# ----------------
+# --------------------------------------------------------------------------------------------------------------------
 
-# ----------------
+# --------------------------------------------------------------------------------------------------------------------
 # Parallellism
-# ----------------
+# --------------------------------------------------------------------------------------------------------------------
 
 torch.tensor([[... , ...], [... , ...]], device = 'cuda')       # assign to GPU on creation 
 torch.tensor([[... , ...], [... , ...]], device = 'cuda:0')     # (multiple gpu machine) assign to GPU 0 on creation 
