@@ -9,4 +9,30 @@ np.nan
     - not equal to itself
     - cant be converted into an int
     - search for them using `isnan()` in NumPy
-    - 
+
+Neural Networks 
+
+    Neuron: 
+        At its core, it is a linear transformation of the input followed by the application of a fixed nonlinear function (activation function)
+        o = f(w*x+b)
+            o as output
+            x as input (scalar or vectorvalues, i.e. holding many scalar values scalars)
+            f as an activation function, set to the hyperbolic tangent, or tanh function. 
+            w as a learned parameter (single scalar or matrix) 
+            b as a learned parameter (scalar or vector) Matching dimensionality to x
+        In a multidimensional scenario (for w & b), his expression is referred to as a layer of neurons. 
+
+    Activation Function: 
+        In the inner parts of the model, it allows the output function to have different slopes at different values - something a linear function by definition cannot do. 
+        By cleverly composing these differently sloped parts for many outputs, neural networks can approximate arbitrary functions. 
+        At the last layer of the network, it has the role of concentrating the outputs of the preceding linear operation into a given range. 
+
+        Activation functions are nonlinear, and differentiable (so that gradients can be computed through them. )
+        These functions have at least one sensitive range, where nontrivial changes to the input result in a corresponding nontrivial change to the output.
+            This is needed for training 
+        Many of them have an insensitive (or saturated) range, where changes to the input result in little or no change to the output. 
+        
+        Often, but not always Activation functions will have at least one of the following: 
+            a lower bound that is approached (or met) as the input goes to negative infinity
+            a similar-but-inverse upper bound for positive infinity
+
