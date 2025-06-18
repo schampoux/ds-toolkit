@@ -3,3 +3,7 @@ __pycache__
 .ipynb_checkpoints
 /datasets
 /notes.txt
+*.egg-info
+/other
+.pytest_cache
+/deep-learning/datasets/
