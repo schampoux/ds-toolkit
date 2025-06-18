@@ -10,8 +10,9 @@ np.nan
     - cant be converted into an int
     - search for them using `isnan()` in NumPy
 
+*------------------------
 Neural Networks 
-
+*------------------------
     Neuron: 
         At its core, it is a linear transformation of the input followed by the application of a fixed nonlinear function (activation function)
         o = f(w*x+b)
@@ -36,3 +37,14 @@ Neural Networks
             a lower bound that is approached (or met) as the input goes to negative infinity
             a similar-but-inverse upper bound for positive infinity
 
+        A neural network needs atleast one hidden layer of activations. 
+            The simplest neural network is 
+                linear
+                Activation
+                linear
+            The final layer will take the output of activations and combine them linearly, to produce the output value. 
+            
+    Normalization 
+        It is good practice to normalize the dataset so that each channel has zero mean and unitary standard deviation. 
+            By choosing activation functions that are linear around `0` plus or minus `1`(or`2`), 
+                keeping the data in the same range means it's more likely that neurons have nonzero gradients and hence will learn sooner. 
