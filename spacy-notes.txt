@@ -1,0 +1,16 @@
+SPACY NOTES 
+
+
+
+Doc.ents
+- ents are the named entities in the document. 
+- doc.ents returns a tuple of named entity Span objects. 
+
+Spans are views, they dont own the data.
+- a Span object is a slice of a Doc object. 
+
+Need help understanding the .label_ attribute of an entity? 
+- you can run 
+        spacy.explain('entity.label_')
+
+        

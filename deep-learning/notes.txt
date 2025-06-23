@@ -1,0 +1,22 @@
+cifar10 = training data 
+cifar10_val = validation data 
+to_tensor() = transforms.ToTensor()
+tensor_cifar10 = training data instantiated with transform.ToTensor()
+
+Our input to the model is a tensor of size (1, 3017) 
+    1 corresponds to the batch
+    3017 corresponds to all the other dimensions (3x32x32)
+
+Our models first layer is linear 
+    (3072, 512) # 512 arbitrarily chosen
+
+The second (hidden) layer is the activation function 
+    Tanh()
+
+The third layer is linear, 
+    (512, 2) # 2 is the size of our output, (probabiliry of airplane, probability of bird) 
+
+Then we hit the softmax
+    Each element of the output must be in the 0 to 1 range 
+    The elements of the output must add up to 1
+

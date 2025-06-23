@@ -13,6 +13,7 @@ np.nan
 *------------------------
 Neural Networks 
 *------------------------
+
     Neuron: 
         At its core, it is a linear transformation of the input followed by the application of a fixed nonlinear function (activation function)
         o = f(w*x+b)
@@ -48,3 +49,37 @@ Neural Networks
         It is good practice to normalize the dataset so that each channel has zero mean and unitary standard deviation. 
             By choosing activation functions that are linear around `0` plus or minus `1`(or`2`), 
                 keeping the data in the same range means it's more likely that neurons have nonzero gradients and hence will learn sooner. 
+
+The combination of using `nn.LogSoftmax()` and `nn.NLLLoss()` is equivalent to using `nn.CrossEntropyLoss`. This terminology is a particularity of Pytorch 
+    This is because the `nn.NLLLoss()` computes the cross entropy but with log probability predictions as inputs where `nn.CrossEntropyLoss` takes scores (logits). 
+    Technically, nn.NLLLoss is the cross entropy between the Dirac distribution, putting all mass on the target, and the predicted distribution given by the log probability inputs. 
+
+
+
+Convolution / Discrete cross-correlations    *Look this up and explain it as an exercise*
+    Output Channels = Convolution Filters 
+
+    Convolutions allow us to have smaller model looking for local patterns, whose weights are optimized across the entire image. 
+    Equivalent to having multiple linear operations whose weights are zero almost everywhere except around individual pixels and that receive equal updates during training. 
+        nn.Conv1d for time series 
+        nn.Conv2d for images
+        nn.conv3d for volumes or videos 
+    
+    Note, Applying a convolution kernel as a weighted sum of pixels in a 3 x 3 neighborhood requires that there are neighbors in all directions. 
+    If we are at index 00, we only have pixels to the right and below. By default, pytorch will slide the convolution kernel within the input picture, 
+        getting `width - kernel_width + 1`horizontal and vertical positions. 
+    Pytorch gives us the possibility of padding the image by createing ghost pixels around the border that have value zero as far as the convolution is concerned. 
+    Why use padding? 
+        Helps us separate the matters of convolution and changing image sizes so we have one less thing to remember. 
+        when we have more elaborate structures (skip connections, U-Nets) we want the tensors before and after a few convolutions to be of compatible size so that we can add them or take differences. 
+
+    Although weights and biases are parameters that are learned through backpropogation, with convolutions 2we can set them by hand to see what happens. 
+
+    MaxPool2d. 
+        -explain as exercise 
+
+nn.Module 
+    A Module is a container for state in the forms of Parameters and submodules combined with the instrucitons to do a forward. 
+    Stateless functions like activation and pooling can be used in the forward with torch.nn.functional rather than defined in the constructur. 
+        With quantization, these stateless parts are now stateful because information about the quantization needs to be captured. 
+        

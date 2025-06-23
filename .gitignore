@@ -6,4 +6,5 @@ __pycache__
 *.egg-info
 /other
 .pytest_cache
+/pandas-workout
 /deep-learning/datasets/
