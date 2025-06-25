@@ -82,4 +82,33 @@ nn.Module
     A Module is a container for state in the forms of Parameters and submodules combined with the instrucitons to do a forward. 
     Stateless functions like activation and pooling can be used in the forward with torch.nn.functional rather than defined in the constructur. 
         With quantization, these stateless parts are now stateful because information about the quantization needs to be captured. 
+    
+
+
+The width of the network is the number of neurons per layer, or channels per convolution. The numbers specifying channels and features for each layer are directly related to the number of parameters in a model; 
+    all other things being equal, they increase the capacity of the model. 
+    The greater the capacity of the model, the more variability in the inputs the model will be able to manage; 
+        likewise, the more likely overfitting will be since the model can use a great number of parameters to memorize unessential aspects of the input. 
+    Combatting overfitting can be done by increasing sample size or augmenting existing data through artificial modifications of the same data. 
+
+Regularization
+    The mathematical tools aimed at easing model optimization as well as generalization. 
+        - Optimization being the decrease in loss in the training set
+        - Generalization being the validation set accuracy. 
+
+    Weight Penalties:
+        - Stabilizing generalization by adding a regularization term to the loss. 
+        - A penalty on larger weight values, making the loss have a smoother topology
+            Simultaneously less gain from fitting individual samples. 
+
+        The following two regularization terms are scaled by a small factor, a hyperparameter we set prior to training. 
+            L2 (weight decay): Sum of squares of all weights in the model
+                Adding L2 regularization to the loss function is equivalent to decreasing each weight by an amount proportional to its current value during optimization step. 
+            L1: Sum of the absolute values of all weights in the model. 
         
+            Note that weight decaying applies to all parameters of the network, such as biases. 
+
+        Note, the SGD optimizer in PyTorch already has a weight_decay parameter that corresponds to 2 * lambda, 
+            and it directly performs weight decay during the opdate. 
+            It is full equivalent to adding the L2 norm of weights to the loss, 
+            without the need for accumulating terms in the loss and involving autograd. 
